@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()
 from app import create_app,socketio
 from config import ProdConfig
 # from flask_socketio import SocketIO
