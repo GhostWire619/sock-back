@@ -64,6 +64,8 @@ def handle_message(data):
         return
 
     print(f"Message from {userName} in room {room_id}: {text}")
+         # Emit the message to the room
+    emit('receive_message', {'userName': userName, 'text':text}, room=room)
 
     # Find the user and room
     user = User.query.filter_by(userName=userName).first()
@@ -87,8 +89,7 @@ def handle_message(data):
     # Save the message to the database
     new_message.save()
 
-    # Emit the message to the room
-    emit('receive_message', {'userName': userName, 'text':text}, room=room)
+  
 
 # Joining a chat room
 @socketio.on('join')
