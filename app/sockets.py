@@ -69,7 +69,7 @@ def handle_message(data):
 
     # Find the user and room
     user = User.query.filter_by(userName=userName).first()
-    room_ = Room.query.filter_by(name=room).first()
+    room_ = Room.query.filter_by(title=room).first()
 
     if not user:
         print(f"User {userName} not found.")
