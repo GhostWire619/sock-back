@@ -1,7 +1,7 @@
 from app import socketio
 from flask import request
-from flask_socketio import  emit, join_room, leave_room
-from .models import Room,User,Messages
+from flask_socketio import emit, join_room, leave_room
+from .models import Room, User, Messages
 
 # Track online users with socket IDs
 online_users = {}
@@ -54,29 +54,29 @@ def get_user_by_sid(sid):
 # Handle incoming messages
 @socketio.on('send_message')
 def handle_message(data):
-    room_id = data.get('room_id')
+    room_id = data.get('room_id')  # Assuming room_id is part of the message data
     room = data.get('room')
     text = data.get('message')
     userName = data.get('userName')
 
-    if not room_id or not text or not userName:
+    if not room or not text or not userName:
         print("Incomplete data received for 'send_message' event.")
         return
 
-    print(f"Message from {userName} in room {room_id}: {text}")
-         # Emit the message to the room
-    emit('receive_message', {'userName': userName, 'text':text}, room=room)
+    print(f"Message from {userName} in room {room}: {text}")
+    # Emit the message to the room
+    emit('receive_message', {'userName': userName, 'text': text}, room=room)
 
     # Find the user and room
     user = User.query.filter_by(userName=userName).first()
-    room_ = Room.query.get(room_id)
+    room_ = Room.query.filter_by(name=room).first()
 
     if not user:
         print(f"User {userName} not found.")
         return
     
     if not room_:
-        print(f"Room with ID {room_id} not found.")
+        print(f"Room {room} not found.")
         return
 
     # Create a new message instance
@@ -88,8 +88,6 @@ def handle_message(data):
 
     # Save the message to the database
     new_message.save()
-
-  
 
 # Joining a chat room
 @socketio.on('join')
@@ -118,7 +116,6 @@ def on_leave(data):
     leave_room(room)
     print(f"User {userName} left room {room}")
     emit('user_status', {'userName': userName, 'status': 'left', 'room': room}, room=room)
-
 
 @socketio.on('test_message')
 def handle_test_message(data):
