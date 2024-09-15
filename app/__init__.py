@@ -6,7 +6,7 @@ from .auth import auth_bp
 from flask_cors  import CORS
 
 # Initialize SocketIO
-socketio = SocketIO(cors_allowed_origins=["http://localhost:5173", "https://room-connect-8cf76c932125.herokuapp.com","https://room-chat-nzzm.onrender.com","https://room-chat.pages.dev"],
+socketio = SocketIO(cors_allowed_origins=["http://localhost:5173", "https://room-connect-8cf76c932125.herokuapp.com","https://room-chat-nzzm.onrender.com","https://room-chat.pages.dev","http://195.238.123.140:3000"],
                     logger=True, engineio_logger=True)
 
 def create_app(config=None):
@@ -20,7 +20,7 @@ def create_app(config=None):
     # CORS configuration
     CORS(app, resources={
         r"/auth/*": {
-            "origins": ["http://localhost:5173", "https://room-connect-8cf76c932125.herokuapp.com","https://room-chat-nzzm.onrender.com","https://room-chat.pages.dev"],
+            "origins": ["http://localhost:5173", "https://room-connect-8cf76c932125.herokuapp.com","https://room-chat-nzzm.onrender.com","https://room-chat.pages.dev","http://195.238.123.140:3000"],
             "methods": ["GET", "POST", "OPTIONS"],
             "allow_headers": ["Authorization", "Content-Type", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers"]
         },
