@@ -65,7 +65,7 @@ def handle_message(data):
 
     print(f"Message from {userName} in room {room}: {text}")
     # Emit the message to the room
-    emit('receive_message', {'userName': userName, 'text': text}, room=room)
+    emit('receive_message', {'userName': userName, 'text': text}, to=room)
 
     # Find the user and room
     user = User.query.filter_by(userName=userName).first()
