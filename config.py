@@ -13,7 +13,7 @@ class DevConfig(Config):
     SQLALCHEMY_ECHO = True
 
 class ProdConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, 'dev.db')
+    SQLALCHEMY_DATABASE_URI = "postgresql://avnadmin:AVNS_wAH0cl_M1NH9lLTNimf@myapp-db-lugata619-7bcd.g.aivencloud.com:26008/defaultdb?sslmode=require"
     #SQLALCHEMY_DATABASE_URI = config("SQLALCHEMY_DATABASE_URI")
     DEBUG = config('DEBUG', default=False, cast=bool)
     SQLALCHEMY_TRACK_MODIFICATIONS = config('SQLALCHEMY_TRACK_MODIFICATIONS', default=False, cast=bool)
