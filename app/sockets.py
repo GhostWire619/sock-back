@@ -3,6 +3,31 @@ from flask import request
 from flask_socketio import emit, join_room, leave_room
 from .models import Room, User, Messages
 
+import firebase_admin
+from firebase_admin import credentials, messaging
+
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate('/etc/secrets/zuzu-265e5-firebase-adminsdk-1lm8m-865089603d.json')  # Path to your Firebase service account key
+firebase_admin.initialize_app(cred)
+
+def send_push_notification(fcm_token, title, body):
+    """ Send a push notification to the user using Firebase Cloud Messaging """
+    message = messaging.Message(
+        notification=messaging.Notification(
+            title=title,
+            body=body
+        ),
+        token=fcm_token,
+    )
+
+    try:
+        # Send message
+        response = messaging.send(message)
+        print("Notification sent successfully:", response)
+    except Exception as e:
+        print(f"Error sending notification: {e}")
+
+
 # Track online users with socket IDs
 online_users = {}
 
@@ -79,6 +104,13 @@ def handle_message(data):
         print(f"Room {room} not found.")
         return
 
+  # Retrieve the FCM token for the user (you need to store this token in your database)
+    fcm_token = user.fcm_token  # This assumes you are storing the user's FCM token in the database
+
+    # Send a push notification to the user
+    send_push_notification(fcm_token, "New Message", text)
+
+    
     # Create a new message instance
     new_message = Messages(
         text=text,
