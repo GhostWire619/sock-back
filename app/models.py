@@ -7,7 +7,12 @@ class User(db.Model):
     password = db.Column(db.Text(), nullable=False)
     fcm_token = db.Column(db.String(255), nullable=True)
     # Define a unique backref name for messages
-    messages_sent = db.relationship('Messages', backref='sender', lazy=True)
+     messages_sent = db.relationship(
+        'Messages', 
+        backref='sender', 
+        lazy=True,
+        overlaps="messages_received,user"
+    )
 
     def __repr__(self):
         return f"<User {self.userName}>"
@@ -46,7 +51,11 @@ class Messages(db.Model):
     createdAt = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('messages_received', lazy=True))
+    user = db.relationship(
+        'User', 
+        backref=db.backref('messages_received', lazy=True, overlaps="messages_sent,sender"),
+        overlaps="messages_sent,sender"
+    )
     room = db.relationship('Room', backref=db.backref('messages', lazy=True))
 
     def __repr__(self):
