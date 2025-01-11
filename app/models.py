@@ -5,7 +5,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userName = db.Column(db.String(25), nullable=False, unique=True)
     password = db.Column(db.Text(), nullable=False)
-
+    fcm_token = db.Column(db.String(255), nullable=True)
     # Define a unique backref name for messages
     messages_sent = db.relationship('Messages', backref='sender', lazy=True)
 
